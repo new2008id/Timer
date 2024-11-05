@@ -32,9 +32,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textViewTimer = findViewById(R.id.textViewTimer);
+        if (savedInstanceState != null) {
+            seconds = savedInstanceState.getInt("seconds");
+            isTimerRunning = savedInstanceState.getBoolean("isTimerRunning");
+        }
         runTimer();
     }
 
+    //    android:configChanges="orientation|screenSize" // NOT bad practise площая практика решения поворота экрана
+
+    // good practise!
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("seconds", seconds);
+        outState.putBoolean("isTimerRunning", isTimerRunning);
+    }
 
 
     public void buttonStartClick(View view) {
