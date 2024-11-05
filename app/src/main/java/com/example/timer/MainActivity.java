@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isTimerRunning = false;
     private int seconds = 0;
+    private boolean wasRunning = false;
     private TextView textViewTimer;
 
     @Override
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             seconds = savedInstanceState.getInt("seconds");
             isTimerRunning = savedInstanceState.getBoolean("isTimerRunning");
+            wasRunning = savedInstanceState.getBoolean("wasRunning");
         }
         runTimer();
     }
@@ -42,11 +44,27 @@ public class MainActivity extends AppCompatActivity {
     //    android:configChanges="orientation|screenSize" // NOT bad practise площая практика решения поворота экрана
 
     // good practise!
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        wasRunning = isTimerRunning;
+        isTimerRunning = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isTimerRunning = wasRunning;
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("seconds", seconds);
         outState.putBoolean("isTimerRunning", isTimerRunning);
+        outState.getBoolean("wasRunning", wasRunning);
     }
 
 
