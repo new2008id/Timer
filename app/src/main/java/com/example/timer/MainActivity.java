@@ -30,9 +30,21 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        if (savedInstanceState != null) {
+            seconds = savedInstanceState.getInt("seconds");
+            isTimerRunning = savedInstanceState.getBoolean("isTimerRunning");
+        }
+
         textViewTimer = findViewById(R.id.textViewTimer);
         runTimer();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("seconds", seconds);
+        outState.putBoolean("isTimerRunning", isTimerRunning);
     }
 
     public void buttonStartClick(View view) {
