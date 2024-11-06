@@ -15,11 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-
+    private TextView textViewTimer;
     private boolean isTimerRunning = false;
     private int seconds = 0;
     private boolean wasRunning = false;
-    private TextView textViewTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +31,17 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        textViewTimer = findViewById(R.id.textViewTimer);
         if (savedInstanceState != null) {
             seconds = savedInstanceState.getInt("seconds");
             isTimerRunning = savedInstanceState.getBoolean("isTimerRunning");
             wasRunning = savedInstanceState.getBoolean("wasRunning");
         }
+
+        textViewTimer = findViewById(R.id.textViewTimer);
         runTimer();
+
     }
-
-    //    android:configChanges="orientation|screenSize" // NOT bad practise площая практика решения поворота экрана
-
-    // good practise!
-
-
+    
     @Override
     protected void onPause() {
         super.onPause();
@@ -64,9 +60,8 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt("seconds", seconds);
         outState.putBoolean("isTimerRunning", isTimerRunning);
-        outState.getBoolean("wasRunning", wasRunning);
+        outState.putBoolean("wasRunning", wasRunning);
     }
-
 
     public void buttonStartClick(View view) {
         isTimerRunning = true;
@@ -81,16 +76,16 @@ public class MainActivity extends AppCompatActivity {
         seconds = 0;
     }
 
-    public void runTimer() {
+    private void runTimer() {
         Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
-                int hours = seconds / 3600;
+                int hourses = seconds / 3600;
                 int minutes = (seconds % 3600) / 60;
-                int secs = seconds % 60;
+                int sec = seconds % 60;
 
-                String time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
+                String time = String.format(Locale.getDefault(), "%02d:%02d:%02d", hourses, minutes, sec);
                 textViewTimer.setText(time);
 
                 if (isTimerRunning) {
@@ -100,4 +95,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    //    android:configChanges="orientation|screenSize" // NOT bad practise площая практика решения поворота экрана
+
+    // good practise!
+
 }
