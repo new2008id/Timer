@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewTimer;
     private boolean isTimerRunning = false;
     private int seconds = 0;
+    private boolean wasRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +34,25 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             seconds = savedInstanceState.getInt("seconds");
             isTimerRunning = savedInstanceState.getBoolean("isTimerRunning");
+            wasRunning = savedInstanceState.getBoolean("wasRunning");
         }
 
         textViewTimer = findViewById(R.id.textViewTimer);
         runTimer();
 
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        wasRunning = isTimerRunning;
+        isTimerRunning = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isTimerRunning = wasRunning;
     }
 
     @Override
@@ -45,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt("seconds", seconds);
         outState.putBoolean("isTimerRunning", isTimerRunning);
+        outState.putBoolean("wasRunning", wasRunning);
     }
 
     public void buttonStartClick(View view) {
